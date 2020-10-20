@@ -43,6 +43,14 @@ function currentSong() {
     var data = {},
         contents = '',
         tmpCurrentSongLogFileStat = [];
+	if(!fs.existsSync(logFile())) {
+		data.trackName = '';
+        data.artistName = '';
+        data.albumName = '';
+        data.genre = '';
+        data.year = '';
+		return data;
+	}
     try {
         tmpCurrentSongLogFileStat = fs.statSync(logFile());
         if (currentSongCachedObject !== null &&
@@ -50,7 +58,6 @@ function currentSong() {
             currentSongCachedLogFileStat.mtime &&
             tmpCurrentSongLogFileStat.mtime &&
             tmpCurrentSongLogFileStat.mtime.getTime() === currentSongCachedLogFileStat.mtime.getTime()
-			&& false
 			) {
             data = currentSongCachedObject;
             debug('Sending current song info from cache');
