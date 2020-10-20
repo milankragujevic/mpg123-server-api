@@ -1,9 +1,7 @@
-/*jshint node:true*/
 var utils = require('./utils'),
     config = require('../config.json');
 
 function volumeGet() {
-    'use strict';
     var soundLevel = 0;
     try {
         soundLevel = utils.shellExecSync('amixer get  ' + config.SOUNDCARD.MAIN_CONTROLLER + ' | tail -1 | awk \'{print$5}\'');
@@ -14,7 +12,6 @@ function volumeGet() {
 }
 
 function volumeUp() {
-    'user strict';
     try {
         utils.shellExecSync('amixer -q set ' + config.SOUNDCARD.MAIN_CONTROLLER + ' 5+');
     } catch (e) {}
@@ -22,7 +19,6 @@ function volumeUp() {
 }
 
 function volumeDown() {
-    'user strict';
     try {
         utils.shellExecSync('amixer -q set ' + config.SOUNDCARD.MAIN_CONTROLLER + ' 5-');
     } catch (e) {}
@@ -30,7 +26,6 @@ function volumeDown() {
 }
 
 function volumeSet(level) {
-    'user strict';
     try {
         utils.shellExecSync('amixer -q set ' + config.SOUNDCARD.MAIN_CONTROLLER + ' ' + level + '%');
     } catch (e) {}
@@ -38,7 +33,6 @@ function volumeSet(level) {
 }
 
 function volumeState() {
-    'use strict';
     var soundState = 'on';
     try {
         soundState = utils.shellExecSync('amixer get  ' + config.SOUNDCARD.MAIN_CONTROLLER + ' | tail -1 | awk \'{print$7}\'').replace(/\[|\]/g, '').trim();
@@ -47,7 +41,6 @@ function volumeState() {
 }
 
 function volumeToggle() {
-    'user strict';
     try {
         utils.shellExecSync('amixer -q set ' + config.SOUNDCARD.MAIN_CONTROLLER + ' toggle');
     } catch (e) {}
@@ -55,7 +48,6 @@ function volumeToggle() {
 }
 
 function volumeOn() {
-    'user strict';
     try {
         utils.shellExecSync('amixer -q set ' + config.SOUNDCARD.MAIN_CONTROLLER + ' on');
     } catch (e) {}
@@ -63,14 +55,12 @@ function volumeOn() {
 }
 
 function volumeOff() {
-    'user strict';
     try {
         utils.shellExecSync('amixer -q set ' + config.SOUNDCARD.MAIN_CONTROLLER + ' off');
     } catch (e) {}
     return volumeState();
 }
 
-//======= exports 
 exports.volumeGet = volumeGet;
 exports.volumeUp = volumeUp;
 exports.volumeDown = volumeDown;
