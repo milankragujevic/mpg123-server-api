@@ -1,10 +1,9 @@
-/*jslint node:true*/
 var config,
     error;
 try {
     config = require('./config.json');
 } catch (e) {
-    error = "========== MPG123-RADIO-SERVER-API-INIT ERROR ==========\n";
+    error = "========== MPG123-SERVER-API-INIT ERROR ==========\n";
     if (e.code === 'MODULE_NOT_FOUND') {
         error += "The configuration file (config.json) does not exists.\n";
         error += "Rename config.json.sample to config.json and run the app again.\n";
