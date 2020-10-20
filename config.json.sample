@@ -2,17 +2,17 @@
     "NODE_ENV": "development",
     "DEBUG": "*,-express:*",
     "CORS": {
-        "ENABLED": false,
+        "ENABLED": true,
         "ALLOW_ORIGIN": "*"
     },
     "SERVER": {
-        "HOST": "127.0.0.1",
+        "HOST": "0.0.0.0",
         "PORT": "3000"
     },
     "LOGS": {
         "MAIN_PATH": "/tmp"
     },
     "SOUNDCARD": {
-        "MAIN_CONTROLLER": "Master"
+        "MAIN_CONTROLLER": "Headphone"
     }
 }
