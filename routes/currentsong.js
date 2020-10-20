@@ -1,10 +1,9 @@
-/*jslint node:true*/
 var express = require('express'),
     router = express.Router(),
     mpg123 = require('../libs/mpg123');
 
 /* /currentsong */
-router.get('/', function (req, res, next) {
+router.get('/currentsong', function (req, res, next) {
     'use strict';
     var data = {};
     data.httpStatus = 200;
