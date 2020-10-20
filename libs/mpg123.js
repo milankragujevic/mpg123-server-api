@@ -1,8 +1,7 @@
-/*jshint node:true*/
 var utils = require('./utils'),
     config = require('../config.json'),
     path = require('path'),
-    debug = require('debug')('MPG123-Radio-Server-API::mpg123.js'),
+    debug = require('debug')('MPG123-Server-API::mpg123.js'),
     fs = require('fs'),
     whoami = null,
     lastStationUrl = '',
@@ -19,12 +18,12 @@ function whoIAm() {
 
 function logFile() {
     'use strict';
-    return path.join(config.LOGS.MAIN_PATH, 'mpg123-radio-server-api-' + whoIAm() + '.log');
+    return path.join(config.LOGS.MAIN_PATH, 'mpg123-server-api-' + whoIAm() + '.log');
 }
 
 function lastStationUrlFile() {
     'use strict';
-    return path.join(config.LOGS.MAIN_PATH, 'mpg123-radio-server-api-' + whoIAm() + '-last-station-url.txt');
+    return path.join(config.LOGS.MAIN_PATH, 'mpg123-server-api-' + whoIAm() + '-last-station-url.txt');
 }
 
 function play(stationUrl) {
