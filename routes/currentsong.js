@@ -4,7 +4,6 @@ var express = require('express'),
 
 /* /currentsong */
 router.get('/', function (req, res, next) {
-    'use strict';
     var data = {};
     data.httpStatus = 200;
     data.currentsong = mpg123.currentSong();
