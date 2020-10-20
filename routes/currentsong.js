@@ -4,10 +4,7 @@ var express = require('express'),
 
 /* /currentsong */
 router.get('/', function (req, res, next) {
-    var data = {};
-    data.httpStatus = 200;
-    data.currentsong = mpg123.currentSong();
-    res.status(200).jsonp(data);
+    res.status(200).jsonp({ success: true, currentSong: mpg123.currentSong() });
 });
 
 module.exports = router;

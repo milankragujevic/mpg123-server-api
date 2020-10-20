@@ -9,6 +9,7 @@
         "HOST": "0.0.0.0",
         "PORT": "3000"
     },
+	"MUSIC_PATH": "/mnt/Music",
     "LOGS": {
         "MAIN_PATH": "/tmp"
     },

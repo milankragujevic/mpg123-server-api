@@ -4,12 +4,10 @@ var utils = require('./utils'),
     debug = require('debug')('MPG123-Server-API::mpg123.js'),
     fs = require('fs'),
     whoami = null,
-    lastStationUrl = '',
     currentSongCachedLogFileStat = null,
     currentSongCachedObject = null;
 
 function whoIAm() {
-    'use strict';
     if (whoami === null) {
         whoami = utils.shellExecSync('whoami').trim();
     }
@@ -17,138 +15,98 @@ function whoIAm() {
 }
 
 function logFile() {
-    'use strict';
     return path.join(config.LOGS.MAIN_PATH, 'mpg123-server-api-' + whoIAm() + '.log');
 }
 
-function lastStationUrlFile() {
-    'use strict';
-    return path.join(config.LOGS.MAIN_PATH, 'mpg123-server-api-' + whoIAm() + '-last-station-url.txt');
-}
-
-function play(stationUrl) {
-    'use strict';
-    if (!stationUrl) {
-        return;
-    }
-    debug('Playing: ' + stationUrl);
-    fs.writeFileSync(lastStationUrlFile(), stationUrl);
-    lastStationUrl = stationUrl;
+function play() {
+    debug('Playing shuffle');
+	var musicDir = config.MUSIC_PATH;
     try {
-        utils.shellExecSync('killall mpg123');
+        utils.shellExecSync('sudo bash -c "killall -HUP mpg123"');
     } catch (e) {}
     try {
-        utils.shellExecSync('mpg123 --loop -1 -@ "' + stationUrl + '" > ' + logFile() + ' 2>&1 &');
+        utils.shellExecSync('sudo bash -c "mpg123 -a hw:0 -T -1 -Z \"' + musicDir + '/*/*/*.mp3\"" > ' + logFile() + ' 2>&1 &');
     } catch (e) {}
 }
 
 function stop() {
-    'use strict';
     debug('Stop');
-    lastStationUrl = '';
     try {
-        utils.shellExecSync('killall mpg123');
+        utils.shellExecSync('sudo bash -c "killall -HUP mpg123"');
     } catch (e) {}
     try {
         fs.unlinkSync(logFile());
     } catch (e) {}
-    try {
-        fs.unlinkSync(lastStationUrlFile());
-    } catch (e) {}
 }
 
 function currentSong() {
-    'use strict';
     var data = {},
         contents = '',
-        tmpCurrentSongLogFileStat = [],
-        stationName = [],
-        trackName = [],
-        audioProperties = '';
+        tmpCurrentSongLogFileStat = [];
     try {
         tmpCurrentSongLogFileStat = fs.statSync(logFile());
         if (currentSongCachedObject !== null &&
             currentSongCachedLogFileStat !== null &&
             currentSongCachedLogFileStat.mtime &&
             tmpCurrentSongLogFileStat.mtime &&
-            tmpCurrentSongLogFileStat.mtime.getTime() === currentSongCachedLogFileStat.mtime.getTime()) {
+            tmpCurrentSongLogFileStat.mtime.getTime() === currentSongCachedLogFileStat.mtime.getTime()
+			&& false
+			) {
             data = currentSongCachedObject;
-            //debug('Sending current song info from cache');
+            debug('Sending current song info from cache');
         } else {
-            //debug('Sending NEW current song info');
+            debug('Sending NEW current song info');
             contents = fs.readFileSync(logFile()).toString();
-            //debug(contents);
-
-            data.stationUrl = lastStationUrl;
-            if (contents.match(/HTTP request failed/)) {
-                data.stationName = 'HTTP request failed. Invalid Station Or Try Again';
-                data.audioProperties = {
-                    format: '',
-                    bitrate: '',
-                    sampleRate: ''
-                };
-                data.trackName = '';
-                data.artistName = '';
-            } else {
-                stationName = contents.match(/ICY-NAME\:(.*)/);
-                if (stationName instanceof Array && stationName.length > 0) {
-                    data.stationName = stationName[1].trim();
-                } else {
-                    data.stationName = '';
-                }
-
-                audioProperties = contents.match(/MPEG (.*) layer(.*)/g);
-                if (audioProperties instanceof Array && audioProperties.length > 0) {
-                    audioProperties = audioProperties[0].split(',');
-                    data.audioProperties = {
-                        format: audioProperties[0].trim(),
-                        bitrate: audioProperties[1].trim(),
-                        sampleRate: audioProperties[2].trim()
-                    };
-                } else {
-                    data.audioProperties = {
-                        format: '',
-                        bitrate: '',
-                        sampleRate: ''
-                    };
-                }
-
-                trackName = contents.match(/ICY-META\: StreamTitle='(.*)';/g);
-                if (trackName instanceof Array && trackName.length > 0) {
-                    trackName = trackName[trackName.length - 1];
-                    trackName = trackName.replace(/^ICY-META\: StreamTitle='|';$|';StreamUrl='(.*)/g, '').trim();
-                    data.trackName = trackName;
-                    trackName = trackName.split(' - ');
-                    if (trackName.length > 0) {
-                        data.artistName = trackName[0].trim();
-                        trackName.shift();
-                        data.trackName = trackName.join(' - ');
-                    } else {
-                        data.artistName = '';
-                    }
-                } else {
-                    data.trackName = '';
-                    data.artistName = '';
-                }
-            }
-
+            // debug(contents);
+			
+			var trackName = contents.match(/Title\:(.*)/);
+			if (trackName instanceof Array && trackName.length > 0) {
+				data.trackName = trackName[1].trim().split("   ")[0].trim();
+			} else {
+				data.trackName = '';
+			}
+			
+			var artistName = contents.match(/Artist\:(.*)/);
+			if (artistName instanceof Array && artistName.length > 0) {
+				data.artistName = artistName[1].trim().split("   ")[0].trim();
+			} else {
+				data.artistName = '';
+			}
+			
+			var albumName = contents.match(/Album\:(.*)/);
+			if (albumName instanceof Array && albumName.length > 0) {
+				data.albumName = albumName[1].trim().split("   ")[0].trim();
+			} else {
+				data.albumName = '';
+			}
+			
+			var genre = contents.match(/Genre\:(.*)/);
+			if (genre instanceof Array && genre.length > 0) {
+				data.genre = genre[1].trim().split("   ")[0].trim();
+			} else {
+				data.genre = '';
+			}
+			
+			var year = contents.match(/Year\:(.*)/);
+			if (year instanceof Array && year.length > 0) {
+				data.year = year[1].trim().split("   ")[0].trim();
+			} else {
+				data.year = '';
+			}
+			
             currentSongCachedObject = data;
             currentSongCachedLogFileStat = {
                 mtime: tmpCurrentSongLogFileStat.mtime
             };
         }
     } catch (e) {
-        //debug('ERROR CurrentSong:');
-        //debug(e);
-        data.stationUrl = '';
-        data.stationName = '';
+        debug('ERROR CurrentSong:');
+        debug(e);
         data.trackName = '';
         data.artistName = '';
-        data.audioProperties = {
-            format: '',
-            bitrate: '',
-            sampleRate: ''
-        };
+        data.albumName = '';
+        data.genre = '';
+        data.year = '';
     }
     return data;
 }
@@ -157,4 +115,3 @@ function currentSong() {
 exports.play = play;
 exports.stop = stop;
 exports.currentSong = currentSong;
-exports.lastStationUrlFile = lastStationUrlFile;

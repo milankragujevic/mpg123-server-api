@@ -11,10 +11,8 @@ routes.play = require('../routes/play');
 routes.stop = require('../routes/stop');
 routes.currentsong = require('../routes/currentsong');
 routes.volume = require('../routes/volume');
-routes.thumbs = require('../routes/thumbs');
 
 function serve() {
-    'use strict';
     var express = require('express'),
         app = express();
 
@@ -40,13 +38,11 @@ function serve() {
     app.use('/stop', routes.stop);
     app.use('/currentsong', routes.currentsong);
     app.use('/volume', routes.volume);
-    app.use('/thumbs', routes.thumbs);
-
 
     /// catch 404 and forward to error handler
     app.use(function (req, res, next) {
         res.status(404).jsonp({
-            httpStatus: 404,
+            success: false,
             message: 'Not Found'
         });
     });
@@ -58,7 +54,7 @@ function serve() {
             debug(err);
         }
         res.status(500).jsonp({
-            httpStatus: 500,
+            success: false,
             message: err.message
         });
     });
@@ -66,9 +62,6 @@ function serve() {
     app.set('port', config.SERVER.PORT || 3000);
     server = app.listen(app.get('port'), app.get('ip'), function () {
         debug('Server listening on ' + server.address().address + ':' + server.address().port);
-        if (utils.isFile(mpg123.lastStationUrlFile())) {
-            mpg123.play(fs.readFileSync(mpg123.lastStationUrlFile()).toString());
-        }
     });
 }
 

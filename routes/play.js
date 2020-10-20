@@ -3,13 +3,9 @@ var express = require('express'),
     mpg123 = require('../libs/mpg123');
 
 /* /play/:stationUrl */
-router.get('/:stationUrl', function (req, res, next) {
-    var data = {};
-    data.httpStatus = 200;
-    if (req.params.stationUrl) {
-        mpg123.play(req.params.stationUrl);
-    }
-    res.status(200).jsonp(data);
+router.get('/', function (req, res, next) {
+	mpg123.play();
+    res.status(200).jsonp({ success: true });
 });
 
 module.exports = router;

@@ -4,10 +4,8 @@ var express = require('express'),
 
 /* /stop */
 router.get('/', function (req, res, next) {
-    var data = {};
-    data.httpStatus = 200;
-    mpg123.stop();
-    res.status(200).jsonp(data);
+	mpg123.stop();
+    res.status(200).jsonp({ success: true });
 });
 
 module.exports = router;

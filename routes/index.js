@@ -3,9 +3,7 @@ var express = require('express'),
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-    var data = {};
-    data.httpStatus = 200;
-    res.status(200).jsonp(data);
+    res.status(200).jsonp({ success: true, about: 'mpg123-server-api', more: 'https://github.com/milankragujevic/mpg123-server-api' });
 });
 
 module.exports = router;
