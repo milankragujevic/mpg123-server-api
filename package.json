@@ -5,7 +5,7 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/milankragujevic/mpg123-radio-server-api.git"
+    "url": "https://github.com/milankragujevic/mpg123-server-api.git"
   },
   "author": "milankragujevic",
   "license": "MIT",
