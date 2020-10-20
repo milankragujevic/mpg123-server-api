@@ -1,5 +1,4 @@
-/*jshint node:true*/
-var debug = require('debug')('MPG123-Radio-Server-API'),
+var debug = require('debug')('MPG123-Server-API'),
     utils = require('./utils'),
     config = require('../config.json'),
     mpg123 = require('./mpg123'),
