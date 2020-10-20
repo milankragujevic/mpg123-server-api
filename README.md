@@ -1,38 +1,43 @@
-mpg123-radio-server-api
+mpg123-server-api
 ========================
 
-### A REST API to play shoutcast/icecast radio stations via mpg123
+### A REST API to shuffle music via mpg123
 
 ## Requirements
  - mpg123
  - alsa-utils  
+ - nodejs + npm
 
 
 ### Important REST Endpoints:
 
-Play a station:
+Play music (shuffle):
 
-    /play/:stationUrl
+	GET /play
     
 Stop playing:
 
-    /stop
+	GET /stop
     
 Get current song info:
 
-    /currentsong
+	GET /currentsong
     
 Get the current volume level:
 
-    /volume
+	GET /volume
     
-Set the volume:
+Increase volume:
 
-    /volume/set/:level
+	GET /volume/up
+    
+Decrease volume:
+
+	GET /volume/down
     
 
- 
+#### Works best on Raspberry Pi
 
+### Acknowledgements
 
-
-    
+Based on [https://github.com/pwlin/mpg123-radio-server-api](pwlin/mpg123-radio-server-api), licensed under MIT. 
