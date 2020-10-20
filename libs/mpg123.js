@@ -41,7 +41,6 @@ function stop() {
 
 function currentSong() {
     var data = {},
-        contents = '',
         tmpCurrentSongLogFileStat = [];
 	if(!fs.existsSync(logFile())) {
 		data.trackName = '';
@@ -58,12 +57,15 @@ function currentSong() {
             currentSongCachedLogFileStat.mtime &&
             tmpCurrentSongLogFileStat.mtime &&
             tmpCurrentSongLogFileStat.mtime.getTime() === currentSongCachedLogFileStat.mtime.getTime()
+			&&
+			config.CACHE_METADATA_ENABLED
 			) {
             data = currentSongCachedObject;
             debug('Sending current song info from cache');
         } else {
             debug('Sending NEW current song info');
-            contents = fs.readFileSync(logFile()).toString();
+            var full_contents = fs.readFileSync(logFile()).toString();
+			var contents = full_contents.split('Playing MPEG stream').pop();
             // debug(contents);
 			
 			var trackName = contents.match(/Title\:(.*)/);

@@ -10,6 +10,7 @@
         "PORT": "3000"
     },
 	"MUSIC_PATH": "/mnt/Music",
+	"CACHE_METADATA_ENABLED": false,
     "LOGS": {
         "MAIN_PATH": "/tmp"
     },
