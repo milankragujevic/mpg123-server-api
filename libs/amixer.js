@@ -13,14 +13,14 @@ function volumeGet() {
 
 function volumeUp() {
     try {
-        utils.shellExecSync('amixer -q set ' + config.SOUNDCARD.MAIN_CONTROLLER + ' 5+');
+        utils.shellExecSync('amixer -q set ' + config.SOUNDCARD.MAIN_CONTROLLER + ' 200+');
     } catch (e) {}
     return volumeGet();
 }
 
 function volumeDown() {
     try {
-        utils.shellExecSync('amixer -q set ' + config.SOUNDCARD.MAIN_CONTROLLER + ' 5-');
+        utils.shellExecSync('amixer -q set ' + config.SOUNDCARD.MAIN_CONTROLLER + ' 200-');
     } catch (e) {}
     return volumeGet();
 }
