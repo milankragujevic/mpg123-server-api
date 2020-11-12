@@ -25,7 +25,7 @@ function play() {
         utils.shellExecSync('sudo bash -c "killall -HUP mpg123"');
     } catch (e) {}
     try {
-        utils.shellExecSync('sudo bash -c "mpg123 -a hw:0 -T -1 -Z \"' + musicDir + '/*/*/*.mp3\"" > ' + logFile() + ' 2>&1 &');
+        utils.shellExecSync('sudo bash -c "mpg123 -a hw:0 -1 -Z \"' + musicDir + '/*/*/*.mp3\"" > ' + logFile() + ' 2>&1 &');
     } catch (e) {}
 }
 
